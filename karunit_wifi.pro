@@ -24,6 +24,3 @@ SUBDIRS += \
     src/
 
 include(src/src.pri)
-
-RESOURCES += \
-    karunit_wifi.qrc
