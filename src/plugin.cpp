@@ -53,6 +53,11 @@ QWidget* KU_Wifi_Plugin::createSettingsWidget()
     return this->settingsWidget;
 }
 
+QWidget* KU_Wifi_Plugin::createAboutWidget()
+{
+    return nullptr;
+}
+
 bool KU_Wifi_Plugin::loadSettings()
 {
     return true;
