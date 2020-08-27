@@ -61,12 +61,11 @@ void SettingsWidget::connectTo(QString const& uni)
     ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Automatic);
 
     //FIXME for some reason availableConnections is sometimes empty
-    qDebug() << ap->ssid();
-    qDebug() << "run";
+    emit log(QString("SSID: %1").arg(ap->ssid()));
     NetworkManager::Connection::Ptr c = nullptr;
     for(auto v : this->wifiDevice->availableConnections())
     {
-        qDebug() << v->name();
+        emit log(QString("Available connection: %1").arg(v->name()));
         if(v->name() == ap->ssid())
             c = v;
     }
