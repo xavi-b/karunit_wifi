@@ -10,6 +10,7 @@ INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 INCLUDEPATH += /usr/include/glib-2.0/
 INCLUDEPATH += /usr/lib/glib-2.0/include
 INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
+INCLUDEPATH += /usr/lib/arm-linux-gnueabihf/glib-2.0/include/
 INCLUDEPATH += /usr/include/libnm/
 
 LIBS += -L$$PWD/../karunit/plugininterface/ -lplugininterface
