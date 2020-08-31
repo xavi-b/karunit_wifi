@@ -17,10 +17,10 @@ INCLUDEPATH += /usr/lib/i386-linux-gnu/glib-2.0/include/
 INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
 INCLUDEPATH += /usr/include/libnm/
 
-LIBS += -L$$PWD/../karunit/plugininterface/ -lplugininterface
+LIBS += -L$$PWD/../karunit/plugininterface/ -lkarunit_plugininterface
 INCLUDEPATH += $$PWD/../karunit/plugininterface
 
-LIBS += -L$$PWD/../karunit/common/ -lcommon
+LIBS += -L$$PWD/../karunit/common/ -lkarunit_common
 INCLUDEPATH += $$PWD/../karunit/common
 
 LIBS += -L$$PWD/../karunit/third-party/xblog/lib -lxblog
