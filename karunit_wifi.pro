@@ -5,6 +5,11 @@ QT             += core widgets dbus network
 TARGET          = karunit_wifi_plugin
 DESTDIR         = $$PWD/../karunit/app/plugins
 
+unix {
+target.path = /usr/local/bin/plugins
+INSTALLS += target
+}
+
 LIBS += -lKF5NetworkManagerQt
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 INCLUDEPATH += /usr/include/glib-2.0/
