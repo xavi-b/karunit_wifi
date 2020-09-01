@@ -14,7 +14,7 @@ void SettingsWidget::addAccessPoint(NetworkManager::AccessPoint const& accessPoi
         QListWidgetItem* item = new QListWidgetItem;
         item->setText(accessPoint.ssid());
         item->setData(Qt::UserRole, accessPoint.uni());
-        item->setData(Qt::ForegroundRole, QColor(accessPoint.uni() == wifiDevice->activeAccessPoint()->uni() ? Qt::green : Qt::black));
+        item->setData(Qt::ForegroundRole, QColor((wifiDevice->activeAccessPoint() && accessPoint.uni() == wifiDevice->activeAccessPoint()->uni()) ? Qt::green : Qt::black));
         this->accessPointListWidget->addItem(item);
     }
 }
