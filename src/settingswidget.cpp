@@ -2,6 +2,7 @@
 
 void SettingsWidget::addAccessPoint(NetworkManager::AccessPoint const& accessPoint)
 {
+    emit log(QString("addAccessPoint"));
     // For simplification we use APs only with Wep security or without any security
     if (accessPoint.wpaFlags().testFlag(NetworkManager::AccessPoint::PairWep40) ||
         accessPoint.wpaFlags().testFlag(NetworkManager::AccessPoint::PairWep104) ||
@@ -9,6 +10,7 @@ void SettingsWidget::addAccessPoint(NetworkManager::AccessPoint const& accessPoi
         accessPoint.wpaFlags().testFlag(NetworkManager::AccessPoint::GroupWep104) ||
         !accessPoint.wpaFlags())
     {
+        emit log(QString("Flags OK"));
         QListWidgetItem* item = new QListWidgetItem;
         item->setText(accessPoint.ssid());
         item->setData(Qt::UserRole, accessPoint.uni());
@@ -19,6 +21,7 @@ void SettingsWidget::addAccessPoint(NetworkManager::AccessPoint const& accessPoi
 
 void SettingsWidget::removeAccessPoint(QString const& uni)
 {
+    emit log(QString("removeAccessPoint"));
     for(int i = this->accessPointListWidget->count()-1; i >= 0; --i)
         if(this->accessPointListWidget->item(i)->data(Qt::UserRole).toString() == uni)
             delete this->accessPointListWidget->takeItem(i);
@@ -26,6 +29,7 @@ void SettingsWidget::removeAccessPoint(QString const& uni)
 
 void SettingsWidget::updateActiveAccessPoint(QString const& uni)
 {
+    emit log(QString("updateActiveAccessPoint"));
     for(int i = 0; i < this->accessPointListWidget->count(); ++i)
     {
         if(this->accessPointListWidget->item(i)->data(Qt::UserRole).toString() == uni)
@@ -82,19 +86,30 @@ SettingsWidget::SettingsWidget(QWidget *parent)
     QVBoxLayout* layout = new QVBoxLayout;
     this->accessPointListWidget = new QListWidget;
     layout->addWidget(this->accessPointListWidget);
-    QPushButton* scanBtn = new QPushButton(tr("Scan"));
-    scanBtn->setDisabled(true);
-    layout->addWidget(scanBtn);
+    this->scanBtn = new QPushButton(tr("Scan"));
+    this->scanBtn->setDisabled(true);
+    layout->addWidget(this->scanBtn);
     this->setLayout(layout);
+}
 
+SettingsWidget::~SettingsWidget()
+{
+
+}
+
+void SettingsWidget::initialize()
+{
     qDBusRegisterMetaType<NMVariantMapMap>();
 
     NetworkManager::Device::List deviceList = NetworkManager::networkInterfaces();
 
+    emit log(QString("Device count: %1").arg(deviceList.size()));
     for(NetworkManager::Device::Ptr dev : deviceList)
     {
+        emit log(QString("Device name: %1").arg(dev->udi()));
         if(dev->type() == NetworkManager::Device::Wifi)
         {
+            emit log(QString("Wifi Device"));
             this->wifiDevice = qobject_cast<NetworkManager::WirelessDevice*>(dev);
             break;
         }
@@ -112,18 +127,19 @@ SettingsWidget::SettingsWidget(QWidget *parent)
 
         connect(this->wifiDevice.get(), &NetworkManager::WirelessDevice::activeAccessPointChanged, this, &SettingsWidget::updateActiveAccessPoint);
 
+        emit log(QString("AccesPoint count: %1").arg(this->wifiDevice->accessPoints().size()));
         for(auto ap : this->wifiDevice->accessPoints())
             this->addAccessPoint(NetworkManager::AccessPoint(ap));
 
-        scanBtn->setEnabled(true);
-        connect(scanBtn, &QPushButton::clicked, this, [=]()
+        this->scanBtn->setEnabled(true);
+        connect(this->scanBtn, &QPushButton::clicked, this, [=]()
         {
-            scanBtn->setDisabled(true);
+            this->scanBtn->setDisabled(true);
             QtConcurrent::run([=]()
             {
                 auto reply = this->wifiDevice->requestScan();
                 reply.waitForFinished();
-                scanBtn->setEnabled(true);
+                this->scanBtn->setEnabled(true);
             });
         });
 
@@ -132,9 +148,4 @@ SettingsWidget::SettingsWidget(QWidget *parent)
             this->connectTo(item->data(Qt::UserRole).toString());
         });
     }
-}
-
-SettingsWidget::~SettingsWidget()
-{
-
 }

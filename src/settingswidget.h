@@ -23,6 +23,7 @@ class SettingsWidget : public QWidget
     Q_OBJECT
 private:
     QListWidget* accessPointListWidget;
+    QPushButton* scanBtn;
     NetworkManager::WirelessDevice::Ptr wifiDevice;
 
     void addAccessPoint(NetworkManager::AccessPoint const& accessPoint);
@@ -33,6 +34,8 @@ private:
 public:
     SettingsWidget(QWidget *parent = nullptr);
     ~SettingsWidget();
+
+    void initialize();
 
 signals:
     void log(QString const& log);

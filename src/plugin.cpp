@@ -35,6 +35,7 @@ bool KU_Wifi_Plugin::initialize()
     this->settingsWidget = new SettingsWidget;
     QObject::connect(this->settingsWidget, &SettingsWidget::log,
                      this->getPluginConnector(), &KU::PLUGIN::PluginConnector::log);
+    this->settingsWidget->initialize();
     return true;
 }
 
