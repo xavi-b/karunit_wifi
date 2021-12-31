@@ -1,7 +1,7 @@
 TEMPLATE        = lib
 CONFIG         += plugin c++17
 DEFINES        += QT_DEPRECATED_WARNINGS
-QT             += core widgets dbus network
+QT             += dbus network quick
 TARGET          = karunit_wifi_plugin
 DESTDIR         = $$PWD/../karunit/app/plugins
 
@@ -35,3 +35,6 @@ SUBDIRS += \
     src/
 
 include(src/src.pri)
+
+RESOURCES += \
+    karunit_wifi.qrc

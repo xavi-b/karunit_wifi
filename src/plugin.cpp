@@ -1,9 +1,5 @@
 #include "plugin.h"
-
-KU_Wifi_Plugin::~KU_Wifi_Plugin()
-{
-
-}
+#include <QQmlEngine>
 
 QString KU_Wifi_Plugin::name() const
 {
@@ -12,12 +8,12 @@ QString KU_Wifi_Plugin::name() const
 
 QString KU_Wifi_Plugin::id() const
 {
-    return "wifi";
+    return "karunit_wifi";
 }
 
 KU::PLUGIN::PluginVersion KU_Wifi_Plugin::version() const
 {
-    return { 1, 0, 0 };
+    return {1, 0, 0};
 }
 
 QString KU_Wifi_Plugin::license() const
@@ -25,38 +21,22 @@ QString KU_Wifi_Plugin::license() const
     return "LGPL";
 }
 
-QIcon KU_Wifi_Plugin::icon() const
+QString KU_Wifi_Plugin::icon() const
 {
-    return QIcon();
+    return QString();
 }
 
 bool KU_Wifi_Plugin::initialize()
 {
-    this->settingsWidget = new SettingsWidget;
-    QObject::connect(this->settingsWidget, &SettingsWidget::log,
-                     this->getPluginConnector(), &KU::PLUGIN::PluginConnector::log);
-    this->settingsWidget->initialize();
+    qmlRegisterSingletonInstance("KarunitPlugins", 1, 0, "KUPWifiPluginConnector", this->pluginConnector);
+    this->getPluginConnector()->initialize();
+
     return true;
 }
 
 bool KU_Wifi_Plugin::stop()
 {
     return true;
-}
-
-QWidget* KU_Wifi_Plugin::createWidget()
-{
-    return nullptr;
-}
-
-QWidget* KU_Wifi_Plugin::createSettingsWidget()
-{
-    return this->settingsWidget;
-}
-
-QWidget* KU_Wifi_Plugin::createAboutWidget()
-{
-    return nullptr;
 }
 
 bool KU_Wifi_Plugin::loadSettings()
@@ -67,4 +47,11 @@ bool KU_Wifi_Plugin::loadSettings()
 bool KU_Wifi_Plugin::saveSettings() const
 {
     return KU::Settings::instance()->status() == QSettings::NoError;
+}
+
+KU_Wifi_PluginConnector* KU_Wifi_Plugin::getPluginConnector()
+{
+    if (this->pluginConnector == nullptr)
+        this->pluginConnector = new KU_Wifi_PluginConnector;
+    return qobject_cast<KU_Wifi_PluginConnector*>(this->pluginConnector);
 }

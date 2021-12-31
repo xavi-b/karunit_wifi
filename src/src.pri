@@ -1,7 +1,7 @@
 HEADERS += \
     $$PWD/plugin.h \
-    $$PWD/settingswidget.h
+    $$PWD/wifipluginconnector.h
 
 SOURCES += \
     $$PWD/plugin.cpp \
-    $$PWD/settingswidget.cpp
+    $$PWD/wifipluginconnector.cpp

@@ -4,11 +4,10 @@
 #include <QtPlugin>
 #include <QIcon>
 #include <QDebug>
-#include <QLabel>
 #include <QDateTime>
 #include "plugininterface.h"
 #include "settings.h"
-#include "settingswidget.h"
+#include "wifipluginconnector.h"
 
 class KU_Wifi_Plugin : public QObject, public KU::PLUGIN::PluginInterface
 {
@@ -17,24 +16,17 @@ class KU_Wifi_Plugin : public QObject, public KU::PLUGIN::PluginInterface
     Q_INTERFACES(KU::PLUGIN::PluginInterface)
 
 public:
-    virtual ~KU_Wifi_Plugin();
-    virtual QString name() const override;
-    virtual QString id() const override;
+    virtual QString                   name() const override;
+    virtual QString                   id() const override;
     virtual KU::PLUGIN::PluginVersion version() const override;
-    virtual QString license() const override;
-    virtual QIcon icon() const override;
-    virtual bool initialize() override;
-    virtual bool stop() override;
+    virtual QString                   license() const override;
+    virtual QString                   icon() const override;
+    virtual bool                      initialize() override;
+    virtual bool                      stop() override;
 
-    virtual QWidget* createWidget() override;
-    virtual QWidget* createSettingsWidget() override;
-    virtual QWidget* createAboutWidget() override;
-    virtual bool loadSettings() override;
-    virtual bool saveSettings() const override;
-
-private:
-    SettingsWidget* settingsWidget = nullptr;
+    virtual bool                     loadSettings() override;
+    virtual bool                     saveSettings() const override;
+    virtual KU_Wifi_PluginConnector* getPluginConnector() override;
 };
-
 
 #endif // BLUEZPLUGIN_H
